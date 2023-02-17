@@ -6,6 +6,7 @@ pragma solidity ^0.5.0;
 
 import {IERC721Receiver} from "./interface/IERC721Receiver.sol";
 import {ENS} from "./interface/ENS.sol";
+import {BaseRegistrar} from "./BaseRegistrar.sol";
 import {IERC721} from "./interface/IERC721.sol";
 import {Address} from "./library/Address.sol";
 import {SafeMath} from "./library/SafeMath.sol";

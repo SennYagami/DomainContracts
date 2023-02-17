@@ -1,11 +1,8 @@
-pragma solidity ^0.5.0;
+import "../registry/SID.sol";
+import "./IBaseRegistrar.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
-import {IERC721} from "./interface/IERC721.sol";
-import {Ownable} from "./Ownable.sol";
-import {ENS} from "./interface/ENS.sol";
-
-contract BaseRegistrar is IERC721, Ownable {
-    uint256 public constant GRACE_PERIOD = 90 days;
+interface IBaseRegistrar is IERC721 {
 
     event ControllerAdded(address indexed controller);
     event ControllerRemoved(address indexed controller);
@@ -20,16 +17,6 @@ contract BaseRegistrar is IERC721, Ownable {
         uint256 expires
     );
     event NameRenewed(uint256 indexed id, uint256 expires);
-
-    // The ENS registry
-    ENS public ens;
-
-    // The namehash of the TLD this registrar owns (eg, .eth)
-    bytes32 public baseNode;
-
-    // A map of addresses that are authorised to register and renew names.
-    mapping(address => bool) public controllers;
-
     // Authorises a controller, who can register and renew domains.
     function addController(address controller) external;
 
@@ -43,7 +30,7 @@ contract BaseRegistrar is IERC721, Ownable {
     function nameExpires(uint256 id) external view returns (uint256);
 
     // Returns true iff the specified name is available for registration.
-    function available(uint256 id) public view returns (bool);
+    function available(uint256 id) external view returns (bool);
 
     /**
      * @dev Register a name.
@@ -57,7 +44,7 @@ contract BaseRegistrar is IERC721, Ownable {
     function renew(uint256 id, uint256 duration) external returns (uint256);
 
     /**
-     * @dev Reclaim ownership of a name in ENS, if you own it in the registrar.
+     * @dev Reclaim ownership of a name in SID, if you own it in the registrar.
      */
     function reclaim(uint256 id, address owner) external;
 }

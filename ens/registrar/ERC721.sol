@@ -19,7 +19,7 @@ contract ERC721 is ERC165, IERC721 {
     // Mapping from token ID to approved address
     mapping(uint256 => address) private _tokenApprovals;
 
-    // Mapping from owner to number of owned token
+    // Mapping from owner to number of owned tokentransfer
     mapping(address => uint256) private _ownedTokensCount;
 
     // Mapping from owner to operator approvals

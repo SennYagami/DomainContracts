@@ -1,8 +1,8 @@
 pragma solidity ^0.5.0;
 
-import {IERC721} from "./interface/IERC721.sol";
+import {IERC721} from "../interface/IERC721.sol";
 import {Ownable} from "./Ownable.sol";
-import {ENS} from "./interface/ENS.sol";
+import {ENS} from "../interface/ENS.sol";
 
 contract BaseRegistrar is IERC721, Ownable {
     uint256 public constant GRACE_PERIOD = 90 days;
