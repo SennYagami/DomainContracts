@@ -89,12 +89,13 @@ contract BNBRegistrarControllerV9 is Ownable {
         view
         returns (ISidPriceOracle.Price memory price)
     {
-        bytes32 label = keccak256(bytes(name));
-        price = prices.domainPriceInBNB(
-            name,
-            base.nameExpires(uint256(label)),
-            duration
-        );
+        // bytes32 label = keccak256(bytes(name));
+        // price = prices.domainPriceInBNB(
+        //     name,
+        //     base.nameExpires(uint256(label)),
+        //     duration
+        // );
+        return ISidPriceOracle.Price(100000000000000, 100000000000000, 0);
     }
 
     function rentPriceWithPointRedemption(
@@ -102,13 +103,15 @@ contract BNBRegistrarControllerV9 is Ownable {
         uint256 duration,
         address registerAddress
     ) public view returns (ISidPriceOracle.Price memory price) {
-        bytes32 label = keccak256(bytes(name));
-        price = prices.domainPriceWithPointRedemptionInBNB(
-            name,
-            base.nameExpires(uint256(label)),
-            duration,
-            registerAddress
-        );
+        // bytes32 label = keccak256(bytes(name));
+        // price = prices.domainPriceWithPointRedemptionInBNB(
+        //     name,
+        //     base.nameExpires(uint256(label)),
+        //     duration,
+        //     registerAddress
+        // );
+
+        return ISidPriceOracle.Price(100000000000000, 100000000000000, 0);
     }
 
     function valid(string memory name) public pure returns (bool) {
@@ -271,19 +274,19 @@ contract BNBRegistrarControllerV9 is Ownable {
         emit NameRegistered(name, label, owner, cost, expires);
 
         //Check is eligible for referral program
-        if (nodehash != bytes32(0)) {
-            (bool isEligible, address resolvedAddress) = referralHub
-                .isReferralEligible(nodehash);
-            if (isEligible && nodehash != bytes32(0)) {
-                referralHub.addNewReferralRecord(nodehash);
-                (uint256 referrerFee, uint256 referreeFee) = referralHub
-                    .getReferralCommisionFee(cost, nodehash);
-                if (referrerFee > 0) {
-                    referralHub.deposit{value: referrerFee}(resolvedAddress);
-                }
-                cost = cost - referreeFee;
-            }
-        }
+        // if (nodehash != bytes32(0)) {
+        //     (bool isEligible, address resolvedAddress) = referralHub
+        //         .isReferralEligible(nodehash);
+        //     if (isEligible && nodehash != bytes32(0)) {
+        //         referralHub.addNewReferralRecord(nodehash);
+        //         (uint256 referrerFee, uint256 referreeFee) = referralHub
+        //             .getReferralCommisionFee(cost, nodehash);
+        //         if (referrerFee > 0) {
+        //             referralHub.deposit{value: referrerFee}(resolvedAddress);
+        //         }
+        //         cost = cost - referreeFee;
+        //     }
+        // }
 
         // Refund any extra payment
         if (msg.value > cost) {
@@ -300,15 +303,16 @@ contract BNBRegistrarControllerV9 is Ownable {
         uint256 duration,
         bool isUsePoints
     ) public payable {
-        ISidPriceOracle.Price memory price;
-        if (isUsePoints) {
-            price = rentPriceWithPointRedemption(name, duration, msg.sender);
-            //deduct points from gift card ledger
-            giftCardLedger.deduct(msg.sender, price.usedPoint);
-        } else {
-            price = rentPrice(name, duration);
-        }
-        uint256 cost = (price.base + price.premium);
+        // ISidPriceOracle.Price memory price;
+        // if (isUsePoints) {
+        //     price = rentPriceWithPointRedemption(name, duration, msg.sender);
+        //     //deduct points from gift card ledger
+        //     giftCardLedger.deduct(msg.sender, price.usedPoint);
+        // } else {
+        //     price = rentPrice(name, duration);
+        // }
+        // uint256 cost = (price.base + price.premium);
+        uint256 cost = 100000000000000;
         require(msg.value >= cost);
         bytes32 label = keccak256(bytes(name));
         uint256 expires = base.renew(uint256(label), duration);
@@ -361,20 +365,22 @@ contract BNBRegistrarControllerV9 is Ownable {
         require(commitments[commitment] + maxCommitmentAge > block.timestamp);
         require(available(name));
         delete (commitments[commitment]);
-        ISidPriceOracle.Price memory price;
-        if (usePoints) {
-            uint256 senderBalance = giftCardLedger.balanceOf(msg.sender);
-            price = rentPriceWithPointRedemption(name, duration, msg.sender);
-            //deduct points from gift card ledger
-            giftCardLedger.deduct(msg.sender, price.usedPoint);
-            assert(
-                senderBalance == 0 ||
-                    senderBalance > giftCardLedger.balanceOf(msg.sender)
-            );
-        } else {
-            price = rentPrice(name, duration);
-        }
-        uint256 cost = (price.base + price.premium);
+        // ISidPriceOracle.Price memory price;
+        // if (usePoints) {
+        //     uint256 senderBalance = giftCardLedger.balanceOf(msg.sender);
+        //     price = rentPriceWithPointRedemption(name, duration, msg.sender);
+        //     //deduct points from gift card ledger
+        //     giftCardLedger.deduct(msg.sender, price.usedPoint);
+        //     assert(
+        //         senderBalance == 0 ||
+        //             senderBalance > giftCardLedger.balanceOf(msg.sender)
+        //     );
+        // } else {
+        //     price = rentPrice(name, duration);
+        // }
+
+        // uint256 cost = (price.base + price.premium);
+        uint256 cost = 100000000000000;
         require(duration >= MIN_REGISTRATION_DURATION);
         require(msg.value >= cost);
         return cost;
